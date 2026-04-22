@@ -51,7 +51,7 @@ function ListingDetail() {
           <img src={listing.photos[photo]} alt="" className="w-full h-full object-cover" />
         </div>
         <div className="mt-3 flex gap-2 overflow-x-auto">
-          {listing.photos.map((p, i) => (
+          {listing.photos.map((p: string, i: number) => (
             <button key={i} onClick={() => setPhoto(i)} className={`shrink-0 w-24 h-16 rounded-xl overflow-hidden ring-2 transition-all ${i === photo ? "ring-primary" : "ring-transparent opacity-70 hover:opacity-100"}`}>
               <img src={p} className="w-full h-full object-cover" alt="" />
             </button>
@@ -121,7 +121,7 @@ function ListingDetail() {
           <div className="mt-5">
             <p className="text-sm font-semibold mb-2">Amenities</p>
             <div className="flex flex-wrap gap-2">
-              {listing.amenities.map((a) => <span key={a} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">{a}</span>)}
+              {listing.amenities.map((a: string) => <span key={a} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">{a}</span>)}
             </div>
           </div>
         </section>
