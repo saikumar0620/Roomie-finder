@@ -52,7 +52,7 @@ function ProfilePage() {
         <section className="mt-6">
           <h2 className="text-xl font-bold mb-3">Interests</h2>
           <div className="flex flex-wrap gap-2">
-            {user.interests.map((i) => <span key={i} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">{i}</span>)}
+            {user.interests.map((i: string) => <span key={i} className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">{i}</span>)}
           </div>
         </section>
 
@@ -62,7 +62,7 @@ function ProfilePage() {
             {Object.entries(user.lifestyle).map(([k, v]) => (
               <div key={k} className="rounded-2xl bg-muted/40 p-4">
                 <p className="text-xs text-muted-foreground capitalize">{k}</p>
-                <p className="font-medium mt-0.5">{typeof v === "number" ? "★".repeat(v) : v}</p>
+                <p className="font-medium mt-0.5">{typeof v === "number" ? "★".repeat(v) : String(v)}</p>
               </div>
             ))}
           </div>
