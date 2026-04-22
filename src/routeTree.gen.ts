@@ -9,38 +9,247 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as MessagesRouteImport } from './routes/messages'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as InterestsRouteImport } from './routes/interests'
+import { Route as FeedRouteImport } from './routes/feed'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ListingsIndexRouteImport } from './routes/listings.index'
+import { Route as ProfileIdRouteImport } from './routes/profile.$id'
+import { Route as ListingsNewRouteImport } from './routes/listings.new'
+import { Route as ListingsIdRouteImport } from './routes/listings.$id'
+import { Route as ReviewsNewIdRouteImport } from './routes/reviews.new.$id'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterestsRoute = InterestsRouteImport.update({
+  id: '/interests',
+  path: '/interests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ListingsIndexRoute = ListingsIndexRouteImport.update({
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileIdRoute = ProfileIdRouteImport.update({
+  id: '/profile/$id',
+  path: '/profile/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsNewRoute = ListingsNewRouteImport.update({
+  id: '/listings/new',
+  path: '/listings/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsIdRoute = ListingsIdRouteImport.update({
+  id: '/listings/$id',
+  path: '/listings/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewsNewIdRoute = ReviewsNewIdRouteImport.update({
+  id: '/reviews/new/$id',
+  path: '/reviews/new/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/feed': typeof FeedRoute
+  '/interests': typeof InterestsRoute
+  '/login': typeof LoginRoute
+  '/messages': typeof MessagesRoute
+  '/onboarding': typeof OnboardingRoute
+  '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
+  '/listings/$id': typeof ListingsIdRoute
+  '/listings/new': typeof ListingsNewRoute
+  '/profile/$id': typeof ProfileIdRoute
+  '/listings/': typeof ListingsIndexRoute
+  '/reviews/new/$id': typeof ReviewsNewIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/feed': typeof FeedRoute
+  '/interests': typeof InterestsRoute
+  '/login': typeof LoginRoute
+  '/messages': typeof MessagesRoute
+  '/onboarding': typeof OnboardingRoute
+  '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
+  '/listings/$id': typeof ListingsIdRoute
+  '/listings/new': typeof ListingsNewRoute
+  '/profile/$id': typeof ProfileIdRoute
+  '/listings': typeof ListingsIndexRoute
+  '/reviews/new/$id': typeof ReviewsNewIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/feed': typeof FeedRoute
+  '/interests': typeof InterestsRoute
+  '/login': typeof LoginRoute
+  '/messages': typeof MessagesRoute
+  '/onboarding': typeof OnboardingRoute
+  '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
+  '/listings/$id': typeof ListingsIdRoute
+  '/listings/new': typeof ListingsNewRoute
+  '/profile/$id': typeof ProfileIdRoute
+  '/listings/': typeof ListingsIndexRoute
+  '/reviews/new/$id': typeof ReviewsNewIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/feed'
+    | '/interests'
+    | '/login'
+    | '/messages'
+    | '/onboarding'
+    | '/register'
+    | '/settings'
+    | '/listings/$id'
+    | '/listings/new'
+    | '/profile/$id'
+    | '/listings/'
+    | '/reviews/new/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/feed'
+    | '/interests'
+    | '/login'
+    | '/messages'
+    | '/onboarding'
+    | '/register'
+    | '/settings'
+    | '/listings/$id'
+    | '/listings/new'
+    | '/profile/$id'
+    | '/listings'
+    | '/reviews/new/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/feed'
+    | '/interests'
+    | '/login'
+    | '/messages'
+    | '/onboarding'
+    | '/register'
+    | '/settings'
+    | '/listings/$id'
+    | '/listings/new'
+    | '/profile/$id'
+    | '/listings/'
+    | '/reviews/new/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FeedRoute: typeof FeedRoute
+  InterestsRoute: typeof InterestsRoute
+  LoginRoute: typeof LoginRoute
+  MessagesRoute: typeof MessagesRoute
+  OnboardingRoute: typeof OnboardingRoute
+  RegisterRoute: typeof RegisterRoute
+  SettingsRoute: typeof SettingsRoute
+  ListingsIdRoute: typeof ListingsIdRoute
+  ListingsNewRoute: typeof ListingsNewRoute
+  ProfileIdRoute: typeof ProfileIdRoute
+  ListingsIndexRoute: typeof ListingsIndexRoute
+  ReviewsNewIdRoute: typeof ReviewsNewIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interests': {
+      id: '/interests'
+      path: '/interests'
+      fullPath: '/interests'
+      preLoaderRoute: typeof InterestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,21 +257,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/listings/': {
+      id: '/listings/'
+      path: '/listings'
+      fullPath: '/listings/'
+      preLoaderRoute: typeof ListingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile/$id': {
+      id: '/profile/$id'
+      path: '/profile/$id'
+      fullPath: '/profile/$id'
+      preLoaderRoute: typeof ProfileIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/new': {
+      id: '/listings/new'
+      path: '/listings/new'
+      fullPath: '/listings/new'
+      preLoaderRoute: typeof ListingsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/$id': {
+      id: '/listings/$id'
+      path: '/listings/$id'
+      fullPath: '/listings/$id'
+      preLoaderRoute: typeof ListingsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reviews/new/$id': {
+      id: '/reviews/new/$id'
+      path: '/reviews/new/$id'
+      fullPath: '/reviews/new/$id'
+      preLoaderRoute: typeof ReviewsNewIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FeedRoute: FeedRoute,
+  InterestsRoute: InterestsRoute,
+  LoginRoute: LoginRoute,
+  MessagesRoute: MessagesRoute,
+  OnboardingRoute: OnboardingRoute,
+  RegisterRoute: RegisterRoute,
+  SettingsRoute: SettingsRoute,
+  ListingsIdRoute: ListingsIdRoute,
+  ListingsNewRoute: ListingsNewRoute,
+  ProfileIdRoute: ProfileIdRoute,
+  ListingsIndexRoute: ListingsIndexRoute,
+  ReviewsNewIdRoute: ReviewsNewIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
