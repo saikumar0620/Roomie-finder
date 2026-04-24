@@ -50,11 +50,11 @@ const avatar = (seed: string) => `https://i.pravatar.cc/200?u=${seed}`;
 export const mockUsers: MockUser[] = [
   {
     id: "u1",
-    name: "Ananya Sharma",
-    age: 26,
-    gender: "Female",
-    occupation: "Product Designer",
-    city: "Bengaluru",
+    name: "saikumar",
+    age: 23,
+    gender: "Male",
+    occupation: "web developer",
+    city: "hyderabad",
     avatar: avatar("ananya"),
     bio: "Designer who loves quiet mornings, loud kitchens, and weekend hikes. Looking for chill humans who care about the space we share.",
     interests: ["Cooking", "Yoga", "Reading", "Coffee", "Travel", "Art"],
