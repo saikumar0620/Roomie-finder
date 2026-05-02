@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@variant dark (&:where(.dark, .dark *));
+
+/* ── Design Tokens ───────────────────────────── */
+:root {
+  --p:       #E11D48;
+  --p-h:     #BE123C;
+  --p-l:     #FFF1F2;
+  --p-glow:  rgba(225, 29, 72, 0.18);
+  --sec:     #DB2777;
+  --acc:     #F59E0B;
+
+  --bg:      #FFFBFB;
+  --sur:     #FFFFFF;
+  --sur2:    #FFF8F9;
+  --bdr:     rgba(225, 29, 72, 0.1);
+
+  --tx:      #1C0A0F;
+  --tx2:     #6B5B5F;
+  --tx3:     #9E8E92;
+
+  --sh1: 0 1px 4px rgba(0,0,0,.04), 0 1px 2px rgba(225,29,72,.04);
+  --sh2: 0 4px 20px rgba(0,0,0,.06), 0 2px 8px rgba(225,29,72,.06);
+  --sh3: 0 12px 48px rgba(0,0,0,.08), 0 4px 16px rgba(225,29,72,.10);
+  --shh: 0 20px 64px rgba(0,0,0,.10), 0 8px 24px rgba(225,29,72,.14);
+
+  --ease: cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.dark {
+  --p:      #FB7185;
+  --p-h:    #FDA4AF;
+  --p-l:    #2D1118;
+  --p-glow: rgba(251, 113, 133, 0.2);
+  --sec:    #F472B6;
+  --acc:    #FCD34D;
+
+  --bg:     #0C0507;
+  --sur:    #1A0810;
+  --sur2:   #2D1118;
+  --bdr:    rgba(251, 113, 133, 0.1);
+
+  --tx:     #FEF2F2;
+  --tx2:    #C4A0A8;
+  --tx3:    #7D5F65;
+
+  --sh1: 0 1px 4px rgba(0,0,0,.3);
+  --sh2: 0 4px 20px rgba(0,0,0,.4);
+  --sh3: 0 12px 48px rgba(0,0,0,.5);
+  --shh: 0 20px 64px rgba(0,0,0,.5), 0 8px 24px rgba(251,113,133,.15);
+}
+
+/* ── Base ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--tx);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--tx);
+}
+
+/* ── Scrollbar ───────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bdr); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--p); }
+
+/* ── Layout ──────────────────────────────────── */
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Glass ───────────────────────────────────── */
+.glass {
+  background: rgba(255, 251, 251, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--bdr);
+}
+.dark .glass {
+  background: rgba(26, 8, 16, 0.85);
+}
+
+/* ── Card ────────────────────────────────────── */
+.card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 16px;
+  box-shadow: var(--sh1);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shh);
+  border-color: var(--p);
+}
+
+/* ── Auth card ───────────────────────────────── */
+.auth-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 20px;
+  box-shadow: var(--sh3);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+}
+
+/* ── Input ───────────────────────────────────── */
+.inp {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--sur2);
+  border: 1.5px solid var(--bdr);
+  border-radius: 10px;
+  color: var(--tx);
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.inp::placeholder { color: var(--tx3); }
+.inp:focus {
+  border-color: var(--p);
+  box-shadow: 0 0 0 3px var(--p-glow);
+  background: var(--sur);
+}
+
+/* ── Label ───────────────────────────────────── */
+.lbl {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--tx2);
+  margin-bottom: 6px;
+}
+
+/* ── Buttons ─────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease), background 0.15s var(--ease);
+  text-decoration: none;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-p {
+  background: var(--p);
+  color: #fff;
+  box-shadow: 0 2px 8px var(--p-glow);
+}
+.btn-p:hover {
+  background: var(--p-h);
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px var(--p-glow);
+}
+.btn-p:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-o {
+  background: transparent;
+  color: var(--tx2);
+  border: 1.5px solid var(--bdr);
+}
+.btn-o:hover {
+  background: var(--p-l);
+  color: var(--p);
+  border-color: var(--p);
+  transform: scale(1.02);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--tx2);
+  border: none;
+  padding: 8px 12px;
+}
+.btn-ghost:hover {
+  background: var(--p-l);
+  color: var(--p);
+}
+
+/* ── Badge ───────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--p-l);
+  color: var(--p);
+  border: 1px solid rgba(225,29,72,0.15);
+}
+.dark .badge {
+  background: var(--p-l);
+  color: var(--p);
+  border-color: rgba(251,113,133,0.2);
+}
+
+/* ── Gradient text ───────────────────────────── */
+.grad-text {
+  background: linear-gradient(135deg, var(--p), var(--sec));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Skeleton ────────────────────────────────── */
+.skel {
+  background: linear-gradient(90deg, var(--sur2) 25%, var(--bdr) 50%, var(--sur2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Page fade-up ────────────────────────────── */
+.fade-up {
+  animation: fadeUp 0.4s var(--ease) both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Staggered children ──────────────────────── */
+.fade-up > * { animation: fadeUp 0.4s var(--ease) both; }
+.fade-up > *:nth-child(1) { animation-delay: 0ms; }
+.fade-up > *:nth-child(2) { animation-delay: 60ms; }
+.fade-up > *:nth-child(3) { animation-delay: 120ms; }
+.fade-up > *:nth-child(4) { animation-delay: 180ms; }
+.fade-up > *:nth-child(5) { animation-delay: 240ms; }
+.fade-up > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ── Divider ─────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--bdr);
+  margin: 24px 0;
+}
+
+/* ── Tag ─────────────────────────────────────── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--sur2);
+  color: var(--tx2);
+  border: 1px solid var(--bdr);
+}
+
+/* ── Section heading ─────────────────────────── */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tx);
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+}
+.section-sub {
+  font-size: 0.875rem;
+  color: var(--tx2);
+  margin-bottom: 24px;
+}
