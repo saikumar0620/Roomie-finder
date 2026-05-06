@@ -1,12 +1,16 @@
 import { databases, storage, ID, DATABASE_ID, COL_LISTING, BUCKET_ID } from "./appwrite";
-import { Query } from "appwrite";
+import { Query, Permission, Role } from "appwrite";
 
 // Upload multiple images
 export const uploadImages = async (files) => {
  const uploaded = [];
 
 for (let file of files) {
-  const res = await storage.createFile(BUCKET_ID, ID.unique(), file);
+  const res = await storage.createFile({
+    bucketId: BUCKET_ID,
+    fileId: ID.unique(),
+    file: file
+  });
   uploaded.push(res.$id); // store ONLY fileId
 }
 
@@ -19,11 +23,19 @@ export const createListing = async (data) => {
     databaseId: DATABASE_ID,
     tableId: COL_LISTING,
     rowId: ID.unique(),
-    data
+    data,
+    permissions: [
+      Permission.read(Role.any()),
+      Permission.update(Role.user(data.userId)),
+      Permission.delete(Role.user(data.userId)),
+    ]
   });
 };
 export const getFilePreview = (fileId) => {
-  return storage.getFilePreview(BUCKET_ID, fileId);
+  return storage.getFilePreview({
+    bucketId: BUCKET_ID,
+    fileId: fileId
+  });
 };
 
 // Update listing
@@ -102,6 +114,6 @@ export const getListings = async ({ pageParam = null, filters }) => {
 
   return {
     documents: res.rows,
-    nextPage: res.rows.length === limit ? lastDoc.$id : undefined,
+    nextPage: (res.rows.length === limit && lastDoc) ? lastDoc.$id : undefined,
   };
 };

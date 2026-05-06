@@ -6,9 +6,11 @@ import { useFavorites } from "../hooks/useFavorites";
 import { deleteListing } from "../services/listing.service";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Profile() {
   const { user } = useAuthStore();
+  const queryClient = useQueryClient();
   const { data: listings = [], refetch } = useUserListings();
   const { data: favoriteListings = [] } = useFavoriteListings();
   const { removeFavorite, favorites } = useFavorites();
@@ -22,6 +24,7 @@ export default function Profile() {
       await deleteListing(id);
       toast.success("Listing deleted");
       refetch();
+      queryClient.invalidateQueries({ queryKey: ["listings"] });
     } catch {
       toast.error("Failed to delete");
     } finally {

@@ -1,5 +1,5 @@
 import { databases, ID, DATABASE_ID, COL_FAVORITES } from "./appwrite";
-import { Query } from "appwrite";
+import { Query, Permission, Role } from "appwrite";
 
 // Get user's favorites
 export const getFavorites = async (userId) => {
@@ -21,6 +21,11 @@ export const addFavorite = async (userId, listingId) => {
       userId,
       listingId,
     },
+    permissions: [
+      Permission.read(Role.user(userId)),
+      Permission.update(Role.user(userId)),
+      Permission.delete(Role.user(userId)),
+    ]
   });
 };
 
