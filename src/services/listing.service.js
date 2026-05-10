@@ -1,24 +1,22 @@
 import { databases, storage, ID, DATABASE_ID, COL_LISTING, BUCKET_ID } from "./appwrite";
 import { Query, Permission, Role } from "appwrite";
 
-// Upload multiple images
 export const uploadImages = async (files) => {
- const uploaded = [];
+  const uploaded = [];
 
-for (let file of files) {
-  const res = await storage.createFile({
-    bucketId: BUCKET_ID,
-    fileId: ID.unique(),
-    file: file,
-    permissions: [Permission.read(Role.any())]
-  });
-  uploaded.push(res.$id); // store ONLY fileId
-}
+  for (const file of files) {
+    const res = await storage.createFile({
+      bucketId: BUCKET_ID,
+      fileId: ID.unique(),
+      file,
+      permissions: [Permission.read(Role.any())]
+    });
+    uploaded.push(res.$id);
+  }
 
   return uploaded;
 };
 
-// Create listing
 export const createListing = async (data) => {
   return await databases.createRow({
     databaseId: DATABASE_ID,
@@ -33,13 +31,12 @@ export const createListing = async (data) => {
   });
 };
 export const getFilePreview = (fileId) => {
-  return storage.getFilePreview({
+  return storage.getFileView({
     bucketId: BUCKET_ID,
     fileId: fileId
   });
 };
 
-// Update listing
 export const updateListing = async (id, data) => {
   return await databases.updateRow({
     databaseId: DATABASE_ID,
@@ -58,7 +55,6 @@ export const getUserListings = async (userId) => {
   return res.rows;
 };
 
-// Delete listing
 export const deleteListing = async (id) => {
   return await databases.deleteRow({
     databaseId: DATABASE_ID,
@@ -79,6 +75,7 @@ export const getListings = async ({ pageParam = null, filters }) => {
   const limit = 6;
 
   const queries = [
+    Query.equal("isAvailable", true),
     Query.limit(limit),
     Query.orderDesc("$createdAt"), // use built-in $createdAt — always indexed
   ];

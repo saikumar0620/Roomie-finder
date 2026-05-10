@@ -141,10 +141,15 @@ export default function Profile() {
             </div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-              {listings.map(l => (
-                <div key={l.$id} className="card" style={{ padding: 0 }}>
-                  <div style={{ padding: "20px 20px 16px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+              {listings.map(l => {
+                const imgSrc = l.images?.[0] ? getFilePreview(l.images[0]).toString() : "https://placehold.co/600x400/FFF1F2/E11D48?text=No+Image";
+                return (
+                  <div key={l.$id} className="card" style={{ padding: 0, overflow: "hidden" }}>
+                    <div style={{ position: "relative", height: 160, width: "100%" }}>
+                      <img src={imgSrc} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </div>
+                    <div style={{ padding: "16px 20px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
                       <h3 style={{ fontSize: "1rem", margin: 0, flex: 1, paddingRight: 8 }}>{l.title}</h3>
                       <span className="badge">₹{Number(l.rent).toLocaleString()}</span>
                     </div>
@@ -170,7 +175,8 @@ export default function Profile() {
                     </button>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </>
@@ -191,9 +197,13 @@ export default function Profile() {
               {favoriteListings.map(l => {
                 // Find the favorite document ID to be able to remove it
                 const favoriteDoc = favorites.find(f => f.listingId === l.$id);
+                const imgSrc = l.images?.[0] ? getFilePreview(l.images[0]).toString() : "https://placehold.co/600x400/FFF1F2/E11D48?text=No+Image";
                 return (
-                  <div key={l.$id} className="card" style={{ padding: 0 }}>
-                    <div style={{ padding: "20px 20px 16px" }}>
+                  <div key={l.$id} className="card" style={{ padding: 0, overflow: "hidden" }}>
+                    <div style={{ position: "relative", height: 160, width: "100%" }}>
+                      <img src={imgSrc} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </div>
+                    <div style={{ padding: "16px 20px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
                         <h3 style={{ fontSize: "1rem", margin: 0, flex: 1, paddingRight: 8 }}>{l.title}</h3>
                         <span className="badge">₹{Number(l.rent).toLocaleString()}</span>

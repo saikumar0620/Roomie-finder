@@ -2,8 +2,6 @@ import { getFilePreview } from "../services/listing.service";
 import FavoriteButton from "./FavoriteButton";
 import { Link } from "react-router-dom";
 
-const BUCKET_ID = "69f48a9600089f531895";
-
 export default function ListingCard({ listing }) {
   const imgSrc = listing.images?.[0]
     ? getFilePreview(listing.images[0]).toString()
@@ -30,6 +28,22 @@ export default function ListingCard({ listing }) {
             position: "absolute", bottom: 0, left: 0, right: 0, height: 80,
             background: "linear-gradient(to top, rgba(0,0,0,0.35), transparent)",
           }} />
+
+          {/* Rented Overlay */}
+          {listing.isAvailable === false && (
+            <div style={{
+              position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+              background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center",
+              backdropFilter: "blur(2px)"
+            }}>
+              <span style={{
+                background: "var(--p)", color: "#fff", padding: "8px 16px", borderRadius: 8,
+                fontSize: "1.125rem", fontWeight: 700, letterSpacing: "1px", textTransform: "uppercase"
+              }}>
+                Rented
+              </span>
+            </div>
+          )}
           {/* Rent badge */}
           <div style={{
             position: "absolute", bottom: 12, left: 14,

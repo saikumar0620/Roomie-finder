@@ -30,18 +30,24 @@ export default function Navbar() {
       <div className="wrap">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 60 }}>
           {/* Logo */}
-          <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{
-              width: 30, height: 30,
-              background: "linear-gradient(135deg, var(--p), var(--sec))",
-              borderRadius: 8,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 15,
-            }}>🏠</div>
-            <span className="grad-text" style={{ fontWeight: 700, fontSize: "1rem", letterSpacing: "-0.03em" }}>
-              Roomie Finder
-            </span>
-          </Link>
+          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+            <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{
+                width: 30, height: 30,
+                background: "linear-gradient(135deg, var(--p), var(--sec))",
+                borderRadius: 8,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 15,
+              }}>🏠</div>
+              <span className="grad-text" style={{ fontWeight: 700, fontSize: "1rem", letterSpacing: "-0.03em" }}>
+                Roomie Finder
+              </span>
+            </Link>
+
+            <Link to="/roommates" style={{ ...linkStyle, marginLeft: 10 }}>
+              Find Roommates
+            </Link>
+          </div>
 
           {/* Actions */}
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>

@@ -6,8 +6,6 @@ import { getOrCreateConversation } from "../services/chat.service";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 
-const BUCKET_ID = "69f48a9600089f531895";
-
 export default function ListingDetails() {
   const { id } = useParams();
   const navigate = useNavigate();

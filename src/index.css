@@ -107,13 +107,26 @@ h1,h2,h3,h4,h5,h6 {
   border: 1px solid var(--bdr);
   border-radius: 16px;
   box-shadow: var(--sh1);
-  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
+  position: relative;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px transparent;
+  pointer-events: none;
+  transition: box-shadow 0.3s var(--ease);
 }
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shh);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.1), 0 10px 10px rgba(225,29,72,0.08);
   border-color: var(--p);
+}
+.card:hover::after {
+  box-shadow: inset 0 0 0 1px var(--p-glow);
 }
 
 /* ── Auth card ───────────────────────────────── */
@@ -130,21 +143,24 @@ h1,h2,h3,h4,h5,h6 {
 /* ── Input ───────────────────────────────────── */
 .inp {
   width: 100%;
-  padding: 11px 14px;
+  padding: 12px 16px;
   background: var(--sur2);
   border: 1.5px solid var(--bdr);
-  border-radius: 10px;
+  border-radius: 12px;
   color: var(--tx);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  transition: all 0.3s var(--ease);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
-.inp::placeholder { color: var(--tx3); }
+.inp::placeholder { color: var(--tx3); transition: opacity 0.3s ease; }
+.inp:focus::placeholder { opacity: 0.5; }
 .inp:focus {
   border-color: var(--p);
-  box-shadow: 0 0 0 3px var(--p-glow);
+  box-shadow: 0 0 0 4px var(--p-glow), inset 0 1px 2px rgba(0,0,0,0.01);
   background: var(--sur);
+  transform: translateY(-1px);
 }
 
 /* ── Label ───────────────────────────────────── */
@@ -161,28 +177,30 @@ h1,h2,h3,h4,h5,h6 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 10px 20px;
-  border-radius: 10px;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
   border: none;
   font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.9375rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease), background 0.15s var(--ease);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
   text-decoration: none;
+  position: relative;
+  overflow: hidden;
 }
-.btn:active { transform: scale(0.97); }
+.btn:active { transform: scale(0.95); }
 
 .btn-p {
-  background: var(--p);
+  background: linear-gradient(135deg, var(--p), var(--sec));
   color: #fff;
-  box-shadow: 0 2px 8px var(--p-glow);
+  box-shadow: 0 4px 12px var(--p-glow);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 .btn-p:hover {
-  background: var(--p-h);
-  transform: scale(1.02);
-  box-shadow: 0 4px 16px var(--p-glow);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px var(--p-glow), 0 0 12px rgba(225,29,72,0.4);
 }
 .btn-p:disabled {
   opacity: 0.55;
@@ -233,10 +251,20 @@ h1,h2,h3,h4,h5,h6 {
 
 /* ── Gradient text ───────────────────────────── */
 .grad-text {
-  background: linear-gradient(135deg, var(--p), var(--sec));
+  background: linear-gradient(135deg, var(--p), var(--acc));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 2px 10px rgba(225, 29, 72, 0.15);
+}
+
+/* ── Glow Effects ────────────────────────────── */
+.glow-pulse {
+  animation: glowPulse 2s infinite alternate;
+}
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 8px var(--p-glow); }
+  100% { box-shadow: 0 0 20px rgba(225, 29, 72, 0.4); }
 }
 
 /* ── Skeleton ────────────────────────────────── */
@@ -280,14 +308,23 @@ h1,h2,h3,h4,h5,h6 {
 .tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 12px;
+  gap: 6px;
+  padding: 6px 14px;
   border-radius: 100px;
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.8125rem;
+  font-weight: 600;
   background: var(--sur2);
   color: var(--tx2);
   border: 1px solid var(--bdr);
+  transition: all 0.3s var(--ease);
+  cursor: default;
+}
+.tag:hover {
+  background: var(--p-l);
+  color: var(--p);
+  border-color: var(--p);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px var(--p-glow);
 }
 
 /* ── Section heading ─────────────────────────── */

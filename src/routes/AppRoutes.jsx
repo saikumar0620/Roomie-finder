@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
+import Roommates from "../pages/Roommates";
 import CreateListing from "../pages/CreateListing";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
@@ -14,6 +15,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/roommates" element={<Roommates />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route
