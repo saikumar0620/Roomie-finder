@@ -20,6 +20,7 @@ export default function CreateListing() {
   const queryClient = useQueryClient();
 
   const [form, setForm] = useState({ title: "", rent: "", location: "", description: "", preferences: "" });
+  const [amenities, setAmenities] = useState([]);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -27,11 +28,18 @@ export default function CreateListing() {
     if (isEdit) {
       getListingById(listingId).then(data => {
         setForm({ title: data.title || "", rent: data.rent || "", location: data.location || "", description: data.description || "", preferences: data.preferences || "" });
+        setAmenities(data.amenities ? data.amenities.split(",").map(a => a.trim()) : []);
       });
     }
   }, [isEdit, listingId]);
 
   const set = (key) => (e) => setForm(f => ({ ...f, [key]: e.target.value }));
+
+  const toggleAmenity = (amenity) => {
+    setAmenities(prev => 
+      prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,6 +60,7 @@ export default function CreateListing() {
       };
       if (form.description) data.description = form.description;
       if (form.preferences) data.preferences = form.preferences;
+      if (amenities.length > 0) data.amenities = amenities.join(", ");
       if (imageUrls.length > 0) data.images = imageUrls;
       if (isEdit) {
         await updateListing(listingId, data);
@@ -115,6 +124,28 @@ export default function CreateListing() {
 
             <Field label="Description">
               <textarea className="inp" placeholder="Describe the room, amenities, house rules..." value={form.description} onChange={set("description")} rows={4} style={{ resize: "vertical", lineHeight: 1.6 }} />
+            </Field>
+
+            <Field label="Amenities">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                {["WiFi", "AC", "Gym", "Parking", "Attached Washroom"].map(amenity => (
+                  <label key={amenity} style={{
+                    display: "flex", alignItems: "center", gap: 6, fontSize: "0.875rem", cursor: "pointer",
+                    background: amenities.includes(amenity) ? "var(--p-light, rgba(79, 70, 229, 0.1))" : "var(--sur2)",
+                    color: amenities.includes(amenity) ? "var(--p)" : "var(--tx2)",
+                    border: `1px solid ${amenities.includes(amenity) ? "var(--p)" : "var(--bdr)"}`,
+                    padding: "6px 12px", borderRadius: 20, transition: "all 0.2s"
+                  }}>
+                    <input 
+                      type="checkbox" 
+                      style={{ display: "none" }}
+                      checked={amenities.includes(amenity)}
+                      onChange={() => toggleAmenity(amenity)} 
+                    />
+                    {amenity}
+                  </label>
+                ))}
+              </div>
             </Field>
 
             <Field label="Photos">

@@ -17,5 +17,6 @@ export const COL_LISTING = import.meta.env.VITE_COLLECTION_LISTING;
 export const COL_FAVORITES = import.meta.env.VITE_COLLECTION_FAVORITES;
 export const COL_CONVERSATIONS = import.meta.env.VITE_COLLECTION_CONVERSATIONS;
 export const COL_MESSAGES = import.meta.env.VITE_COLLECTION_MESSAGES;
+export const COL_PROFILES = import.meta.env.VITE_COLLECTION_PROFILES;
 
 export { ID };

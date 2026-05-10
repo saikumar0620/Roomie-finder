@@ -1,8 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useMessages } from "../hooks/useMessages";
 import { useState, useRef, useEffect } from "react";
-import { sendMessage } from "../services/chat.service";
+import { sendMessage, getUserConversations } from "../services/chat.service";
 import { useAuthStore } from "../store/useAuthStore";
+import { useQuery } from "@tanstack/react-query";
+import { getProfile } from "../services/profile.service";
+import { getFilePreview } from "../services/listing.service";
 
 export default function Chat() {
   const { id } = useParams();
@@ -11,6 +14,22 @@ export default function Chat() {
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
   const bottomRef = useRef(null);
+
+  // Fetch the conversation details to find out who we are talking to
+  const { data: conversations = [] } = useQuery({
+    queryKey: ["conversations", user?.$id],
+    queryFn: () => getUserConversations(user.$id),
+    enabled: !!user,
+  });
+  const conversation = conversations.find(c => c.$id === id);
+  const otherUserId = conversation ? (conversation.user1Id === user.$id ? conversation.user2Id : conversation.user1Id) : null;
+
+  // Fetch the other user's profile
+  const { data: profile } = useQuery({
+    queryKey: ["profile", otherUserId],
+    queryFn: () => getProfile(otherUserId),
+    enabled: !!otherUserId,
+  });
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -46,13 +65,20 @@ export default function Chat() {
           display: "flex", alignItems: "center", gap: 12,
         }}>
           <div style={{
-            width: 36, height: 36, borderRadius: "50%",
+            width: 40, height: 40, borderRadius: "50%",
             background: "linear-gradient(135deg, var(--p), var(--sec))",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 16,
-          }}>💬</div>
+            fontSize: 16, color: "#fff", fontWeight: 600,
+            backgroundImage: profile?.avatarId ? `url(${getFilePreview(profile?.avatarId)})` : "none",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}>
+            {!profile?.avatarId && (profile?.bio ? "U" : "💬")}
+          </div>
           <div>
-            <h2 style={{ margin: 0, fontSize: "1rem" }}>Conversation</h2>
+            <h2 style={{ margin: 0, fontSize: "1rem" }}>
+              {profile?.bio ? "User" : "Conversation"}
+            </h2>
             <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--p)", display: "flex", alignItems: "center", gap: 4 }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--p)", animation: "pulse 2s infinite" }} />
               Live

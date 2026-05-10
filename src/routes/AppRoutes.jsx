@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import CreateListing from "../pages/CreateListing";
 import Profile from "../pages/Profile";
+import EditProfile from "../pages/EditProfile";
 import ProtectedRoute from "../routes/protectedRoute";
 import ListingDetails from "../pages/ListingDetails";
 import Inbox from "../pages/Inbox";
@@ -38,6 +39,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile/edit"
+        element={
+          <ProtectedRoute>
+            <EditProfile />
           </ProtectedRoute>
         }
       />

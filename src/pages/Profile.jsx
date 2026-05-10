@@ -6,7 +6,9 @@ import { useFavorites } from "../hooks/useFavorites";
 import { deleteListing } from "../services/listing.service";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
+import { getProfile } from "../services/profile.service";
+import { getFilePreview } from "../services/listing.service";
 
 export default function Profile() {
   const { user } = useAuthStore();
@@ -16,6 +18,12 @@ export default function Profile() {
   const { removeFavorite, favorites } = useFavorites();
   const [activeTab, setActiveTab] = useState("listings");
   const [loadingId, setLoadingId] = useState(null);
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile", user?.$id],
+    queryFn: () => getProfile(user?.$id),
+    enabled: !!user,
+  });
 
   const handleDelete = async (id) => {
     if (!confirm("Delete this listing?")) return;
@@ -36,27 +44,51 @@ export default function Profile() {
     <div className="wrap fade-up" style={{ paddingTop: 40, paddingBottom: 60 }}>
       {/* Profile card */}
       <div style={{
-        display: "flex", alignItems: "center", gap: 20,
         background: "var(--sur)", border: "1px solid var(--bdr)",
-        borderRadius: 20, padding: "28px 32px", marginBottom: 40,
+        borderRadius: 20, padding: "32px", marginBottom: 40,
         boxShadow: "var(--sh2)",
       }}>
-        <div style={{
-          width: 64, height: 64, borderRadius: "50%",
-          background: "linear-gradient(135deg, var(--p), var(--sec))",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          color: "#fff", fontSize: "1.5rem", fontWeight: 700,
-          boxShadow: "0 4px 16px var(--p-glow)", flexShrink: 0,
-        }}>
-          {user?.name?.charAt(0).toUpperCase() || "U"}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 24 }}>
+          <div style={{
+            width: 80, height: 80, borderRadius: "50%",
+            background: "linear-gradient(135deg, var(--p), var(--sec))",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#fff", fontSize: "2rem", fontWeight: 700,
+            backgroundImage: profile?.avatarId ? `url(${getFilePreview(profile.avatarId)})` : "none",
+            backgroundSize: "cover", backgroundPosition: "center",
+            boxShadow: "0 4px 16px var(--p-glow)", flexShrink: 0,
+          }}>
+            {!profile?.avatarId && (user?.name?.charAt(0).toUpperCase() || "U")}
+          </div>
+          
+          <div style={{ flex: 1 }}>
+            <h1 style={{ fontSize: "1.5rem", margin: "0 0 4px" }}>{user?.name}</h1>
+            <p style={{ color: "var(--tx2)", fontSize: "0.9375rem", margin: "0 0 16px" }}>{user?.email}</p>
+            
+            {profile?.bio && (
+              <p style={{ color: "var(--tx)", lineHeight: 1.6, fontSize: "0.9375rem", marginBottom: 16 }}>
+                {profile.bio}
+              </p>
+            )}
+
+            {profile?.habits && (
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {profile.habits.split(",").map(h => h.trim()).filter(Boolean).map((habit, i) => (
+                  <span key={i} className="tag" style={{ background: "var(--sur2)" }}>{habit}</span>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <Link to="/profile/edit" className="btn btn-o" style={{ textDecoration: "none" }}>
+              Edit Profile
+            </Link>
+            <Link to="/create" className="btn btn-p" style={{ textDecoration: "none" }}>
+              + Post Room
+            </Link>
+          </div>
         </div>
-        <div style={{ flex: 1 }}>
-          <h1 style={{ fontSize: "1.375rem", margin: "0 0 4px" }}>{user?.name}</h1>
-          <p style={{ color: "var(--tx2)", fontSize: "0.875rem", margin: 0 }}>{user?.email}</p>
-        </div>
-        <Link to="/create" className="btn btn-p" style={{ textDecoration: "none" }}>
-          + Post Room
-        </Link>
       </div>
 
       {/* Tabs */}

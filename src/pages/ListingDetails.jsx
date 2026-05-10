@@ -90,11 +90,48 @@ export default function ListingDetails() {
         )}
       </div>
 
+      {/* Amenities */}
+      {data.amenities && data.amenities.length > 0 && (
+        <div style={{ marginBottom: 32 }}>
+          <h2 style={{ fontSize: "1.0625rem", marginBottom: 12 }}>Amenities</h2>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            {data.amenities.split(",").map(a => a.trim()).filter(Boolean).map(amenity => (
+              <span key={amenity} style={{
+                background: "var(--sur)", border: "1px solid var(--bdr)",
+                padding: "8px 16px", borderRadius: 20, fontSize: "0.875rem",
+                display: "flex", alignItems: "center", gap: 6
+              }}>
+                <span style={{ color: "var(--p)" }}>✓</span> {amenity}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Description */}
       {data.description && (
         <div style={{ background: "var(--sur)", border: "1px solid var(--bdr)", borderRadius: 16, padding: "24px", marginBottom: 24 }}>
           <h2 style={{ fontSize: "1.0625rem", marginBottom: 12 }}>About this place</h2>
-          <p style={{ color: "var(--tx2)", lineHeight: 1.7, margin: 0, fontSize: "0.9375rem" }}>{data.description}</p>
+          <p style={{ color: "var(--tx2)", lineHeight: 1.7, margin: 0, fontSize: "0.9375rem", whiteSpace: "pre-wrap" }}>{data.description}</p>
+        </div>
+      )}
+
+      {/* Map View */}
+      {data.location && (
+        <div style={{ background: "var(--sur)", border: "1px solid var(--bdr)", borderRadius: 16, padding: "24px", marginBottom: 24 }}>
+          <h2 style={{ fontSize: "1.0625rem", marginBottom: 16 }}>Location Map</h2>
+          <div style={{ width: "100%", height: 300, borderRadius: 12, overflow: "hidden", background: "var(--sur2)" }}>
+            <iframe
+              title="Listing Location Map"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(data.location)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+            />
+          </div>
         </div>
       )}
 

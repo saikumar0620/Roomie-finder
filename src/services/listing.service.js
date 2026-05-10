@@ -104,6 +104,13 @@ export const getListings = async ({ pageParam = null, filters }) => {
     queries.push(Query.equal("preferences", filters.preferences));
   }
 
+  if (filters?.amenities && filters.amenities.length > 0) {
+    // Check if the listing contains the selected amenities using Fulltext search
+    filters.amenities.forEach(amenity => {
+      queries.push(Query.search("amenities", amenity));
+    });
+  }
+
   const res = await databases.listRows({
     databaseId: DATABASE_ID,
     tableId: COL_LISTING,

@@ -1,15 +1,72 @@
-import { useQuery } from "@tanstack/react-query";
-import { getUserConversations } from "../services/chat.service";
+import { useConversations } from "../hooks/useConversations";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getProfile } from "../services/profile.service";
+import { getFilePreview } from "../services/listing.service";
+
+function ConversationCard({ conversation, otherUserId, index }) {
+  const { data: profile } = useQuery({
+    queryKey: ["profile", otherUserId],
+    queryFn: () => getProfile(otherUserId),
+    enabled: !!otherUserId,
+  });
+
+  return (
+    <Link
+      to={`/chat/${conversation.$id}`}
+      style={{ textDecoration: "none" }}
+    >
+      <div
+        className="card"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          padding: "16px 20px",
+          borderRadius: 14,
+          animationDelay: `${index * 60}ms`,
+        }}
+      >
+        <div
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: "50%",
+            flexShrink: 0,
+            background: `linear-gradient(135deg, var(--p), var(--sec))`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontWeight: 600,
+            backgroundImage: profile?.avatarId ? `url(${getFilePreview(profile?.avatarId)})` : "none",
+            backgroundSize: "cover",
+            backgroundPosition: "center"
+          }}
+        >
+          {!profile?.avatarId && (profile?.bio ? "U" : "💬")}
+        </div>
+
+        <div style={{ flex: 1 }}>
+          <p style={{ margin: 0, fontWeight: 500, color: "var(--tx)" }}>
+            {profile?.bio ? "User" : "Conversation"}
+          </p>
+
+          <p style={{ margin: 0, fontSize: 12, color: "var(--tx2)" }}>
+            User ID: {otherUserId}
+          </p>
+        </div>
+
+        <span style={{ color: "var(--tx3)" }}>›</span>
+      </div>
+    </Link>
+  );
+}
 
 export default function Inbox() {
   const { user } = useAuthStore();
-  const { data = [], isLoading, isError, error } = useQuery({
-    queryKey: ["conversations", user?.$id],
-    queryFn: () => getUserConversations(user.$id),
-    enabled: !!user,
-  });
+  const { data = [], isLoading, isError, error } = useConversations(user?.$id);
 
   return (
     <div className="wrap fade-up" style={{ paddingTop: 40, paddingBottom: 60, maxWidth: 640 }}>
@@ -52,58 +109,8 @@ export default function Inbox() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {data.map((c, i) => {
-          const otherUser =
-            c.user1Id === user.$id ? c.user2Id : c.user1Id;
-
-          return (
-            <Link
-              key={c.$id}
-              to={`/chat/${c.$id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div
-                className="card"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 16,
-                  padding: "16px 20px",
-                  borderRadius: 14,
-                  animationDelay: `${i * 60}ms`,
-                }}
-              >
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "50%",
-                    flexShrink: 0,
-                    background: `linear-gradient(135deg, var(--p), var(--sec))`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#fff",
-                    fontWeight: 600,
-                  }}
-                >
-                  💬
-                </div>
-
-                <div style={{ flex: 1 }}>
-                  <p style={{ margin: 0, fontWeight: 500 }}>
-                    Conversation
-                  </p>
-
-                  {/* ✅ FIXED */}
-                  <p style={{ margin: 0, fontSize: 12, color: "gray" }}>
-                    {otherUser}
-                  </p>
-                </div>
-
-                <span>›</span>
-              </div>
-            </Link>
-          );
+          const otherUser = c.user1Id === user.$id ? c.user2Id : c.user1Id;
+          return <ConversationCard key={c.$id} conversation={c} otherUserId={otherUser} index={i} />;
         })}
       </div>
     </div>
