@@ -6,11 +6,11 @@ export const uploadImages = async (files) => {
  const uploaded = [];
 
 for (let file of files) {
-  const res = await storage.createFile({
-    bucketId: BUCKET_ID,
-    fileId: ID.unique(),
-    file: file
-  });
+  const res = await storage.createFile(
+    BUCKET_ID,
+    ID.unique(),
+    file
+  );
   uploaded.push(res.$id); // store ONLY fileId
 }
 
@@ -19,59 +19,59 @@ for (let file of files) {
 
 // Create listing
 export const createListing = async (data) => {
-  return await databases.createRow({
-    databaseId: DATABASE_ID,
-    tableId: COL_LISTING,
-    rowId: ID.unique(),
+  return await databases.createDocument(
+    DATABASE_ID,
+    COL_LISTING,
+    ID.unique(),
     data,
-    permissions: [
+    [
       Permission.read(Role.any()),
       Permission.update(Role.user(data.userId)),
       Permission.delete(Role.user(data.userId)),
     ]
-  });
+  );
 };
 export const getFilePreview = (fileId) => {
-  return storage.getFilePreview({
-    bucketId: BUCKET_ID,
-    fileId: fileId
-  });
+  return storage.getFilePreview(
+    BUCKET_ID,
+    fileId
+  );
 };
 
 // Update listing
 export const updateListing = async (id, data) => {
-  return await databases.updateRow({
-    databaseId: DATABASE_ID,
-    tableId: COL_LISTING,
-    rowId: id,
+  return await databases.updateDocument(
+    DATABASE_ID,
+    COL_LISTING,
+    id,
     data
-  });
+  );
 };
 
 export const getUserListings = async (userId) => {
-  const res = await databases.listRows({
-    databaseId: DATABASE_ID,
-    tableId: COL_LISTING,
-    queries: [Query.equal("userId", userId)]
-  });
-  return res.rows;
+  const res = await databases.listDocuments(
+    DATABASE_ID,
+    COL_LISTING,
+    [Query.equal("userId", userId)]
+  );
+  return res.documents;
 };
 
 // Delete listing
 export const deleteListing = async (id) => {
-  return await databases.deleteRow({
-    databaseId: DATABASE_ID,
-    tableId: COL_LISTING,
-    rowId: id
-  });
+  return await databases.deleteDocument(
+    DATABASE_ID,
+    COL_LISTING,
+    id
+  );
 };
 
 export const getListingById = async (id) => {
-  return await databases.getRow({
-    databaseId: DATABASE_ID,
-    tableId: COL_LISTING,
-    rowId: id
-  });
+  return await databases.getDocument(
+    DATABASE_ID,
+    COL_LISTING,
+    id
+  );
 };
 
 export const getListings = async ({ pageParam = null, filters }) => {
@@ -103,17 +103,17 @@ export const getListings = async ({ pageParam = null, filters }) => {
     queries.push(Query.equal("preferences", filters.preferences));
   }
 
-  const res = await databases.listRows({
-    databaseId: DATABASE_ID,
-    tableId: COL_LISTING,
+  const res = await databases.listDocuments(
+    DATABASE_ID,
+    COL_LISTING,
     queries
-  });
+  );
 
   // Return the $id of the last document as the cursor for the next page
-  const lastDoc = res.rows[res.rows.length - 1];
+  const lastDoc = res.documents[res.documents.length - 1];
 
   return {
-    documents: res.rows,
-    nextPage: (res.rows.length === limit && lastDoc) ? lastDoc.$id : undefined,
+    documents: res.documents,
+    nextPage: (res.documents.length === limit && lastDoc) ? lastDoc.$id : undefined,
   };
 };
