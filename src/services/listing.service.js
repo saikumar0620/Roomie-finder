@@ -73,39 +73,21 @@ export const getListingById = async (id) => {
 
 export const getListings = async ({ pageParam = null, filters }) => {
   const limit = 6;
-
   const queries = [
     Query.equal("isAvailable", true),
-    Query.limit(limit),
-    Query.orderDesc("$createdAt"), // use built-in $createdAt — always indexed
+    Query.orderDesc("$createdAt"),
   ];
 
-  // Cursor-based pagination (Appwrite v25+)
-  if (pageParam) {
-    queries.push(Query.cursorAfter(pageParam));
-  }
+  const hasFilters = filters?.minRent || filters?.maxRent || filters?.location || filters?.preferences || (filters?.amenities && filters.amenities.length > 0);
 
-  if (filters?.minRent) {
-    queries.push(Query.greaterThanEqual("rent", Number(filters.minRent)));
-  }
-
-  if (filters?.maxRent) {
-    queries.push(Query.lessThanEqual("rent", Number(filters.maxRent)));
-  }
-
-  if (filters?.location) {
-    queries.push(Query.search("location", filters.location));
-  }
-
-  if (filters?.preferences) {
-    queries.push(Query.equal("preferences", filters.preferences));
-  }
-
-  if (filters?.amenities && filters.amenities.length > 0) {
-    // Check if the listing contains the selected amenities using Fulltext search
-    filters.amenities.forEach(amenity => {
-      queries.push(Query.search("amenities", amenity));
-    });
+  if (hasFilters) {
+    // Fetch a large batch to filter client-side, avoiding Appwrite strict index requirements
+    queries.push(Query.limit(100));
+  } else {
+    queries.push(Query.limit(limit));
+    if (pageParam) {
+      queries.push(Query.cursorAfter(pageParam));
+    }
   }
 
   const res = await databases.listRows({
@@ -114,11 +96,38 @@ export const getListings = async ({ pageParam = null, filters }) => {
     queries
   });
 
-  // Return the $id of the last document as the cursor for the next page
-  const lastDoc = res.rows[res.rows.length - 1];
+  let docs = res.rows;
 
+  if (hasFilters) {
+    if (filters.minRent) docs = docs.filter(d => Number(d.rent) >= Number(filters.minRent));
+    if (filters.maxRent) docs = docs.filter(d => Number(d.rent) <= Number(filters.maxRent));
+    if (filters.location) {
+      const loc = filters.location.toLowerCase();
+      docs = docs.filter(d => d.location && d.location.toLowerCase().includes(loc));
+    }
+    if (filters.preferences) docs = docs.filter(d => d.preferences === filters.preferences);
+    if (filters.amenities && filters.amenities.length > 0) {
+      docs = docs.filter(d => {
+        if (!d.amenities) return false;
+        const listingAmens = d.amenities.split(",").map(a => a.trim().toLowerCase());
+        return filters.amenities.every(reqAmen => listingAmens.includes(reqAmen.toLowerCase()));
+      });
+    }
+
+    // Client-side pagination
+    const startIndex = pageParam ? docs.findIndex(d => d.$id === pageParam) + 1 : 0;
+    const paginatedDocs = docs.slice(startIndex, startIndex + limit);
+    const lastDoc = paginatedDocs[paginatedDocs.length - 1];
+
+    return {
+      documents: paginatedDocs,
+      nextPage: (paginatedDocs.length === limit && startIndex + limit < docs.length) ? lastDoc.$id : undefined,
+    };
+  }
+
+  const lastDoc = docs[docs.length - 1];
   return {
-    documents: res.rows,
-    nextPage: (res.rows.length === limit && lastDoc) ? lastDoc.$id : undefined,
+    documents: docs,
+    nextPage: (docs.length === limit && lastDoc) ? lastDoc.$id : undefined,
   };
 };

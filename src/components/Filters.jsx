@@ -1,4 +1,17 @@
 import { useState } from "react";
+import LocationAutocomplete from "./LocationAutocomplete";
+
+const AMENITIES_LIST = [
+  { id: "WiFi", icon: "📶" },
+  { id: "AC", icon: "❄️" },
+  { id: "Gym", icon: "🏋️" },
+  { id: "Parking", icon: "🚗" },
+  { id: "Attached Washroom", icon: "🚿" },
+  { id: "Washing Machine", icon: "🧺" },
+  { id: "Power Backup", icon: "⚡" },
+  { id: "Geyser", icon: "♨️" },
+  { id: "Balcony", icon: "🪴" },
+];
 
 export default function Filters({ onApply }) {
   const [minRent, setMinRent] = useState("");
@@ -55,11 +68,10 @@ export default function Filters({ onApply }) {
 
         <div style={{ flex: "2 1 180px", minWidth: 180 }}>
           <label className="lbl">Location</label>
-          <input
-            placeholder="City or area..."
-            className="inp"
-            value={location}
-            onChange={e => setLocation(e.target.value)}
+          <LocationAutocomplete 
+            value={location} 
+            onChange={setLocation} 
+            placeholder="City or area..." 
           />
         </div>
 
@@ -74,6 +86,9 @@ export default function Filters({ onApply }) {
             <option value="">Any</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
+            <option value="couple">Couple</option>
+            <option value="student">Student</option>
+            <option value="professional">Professional</option>
             <option value="any">No preference</option>
           </select>
         </div>
@@ -91,21 +106,21 @@ export default function Filters({ onApply }) {
       <div style={{ marginTop: 16 }}>
         <label className="lbl" style={{ marginBottom: 8, display: "block" }}>Amenities</label>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-          {["WiFi", "AC", "Gym", "Parking", "Attached Washroom"].map(amenity => (
-            <label key={amenity} style={{
+          {AMENITIES_LIST.map(({ id, icon }) => (
+            <label key={id} style={{
               display: "flex", alignItems: "center", gap: 6, fontSize: "0.875rem", cursor: "pointer",
-              background: amenities.includes(amenity) ? "var(--p-light, rgba(79, 70, 229, 0.1))" : "var(--sur2)",
-              color: amenities.includes(amenity) ? "var(--p)" : "var(--tx2)",
-              border: `1px solid ${amenities.includes(amenity) ? "var(--p)" : "var(--bdr)"}`,
+              background: amenities.includes(id) ? "var(--p-light, rgba(225, 29, 72, 0.08))" : "var(--sur2)",
+              color: amenities.includes(id) ? "var(--p)" : "var(--tx2)",
+              border: `1px solid ${amenities.includes(id) ? "var(--p)" : "var(--bdr)"}`,
               padding: "6px 12px", borderRadius: 20, transition: "all 0.2s"
             }}>
               <input 
                 type="checkbox" 
                 style={{ display: "none" }}
-                checked={amenities.includes(amenity)}
-                onChange={() => toggleAmenity(amenity)} 
+                checked={amenities.includes(id)}
+                onChange={() => toggleAmenity(id)} 
               />
-              {amenity}
+              <span style={{ fontSize: "1rem" }}>{icon}</span> {id}
             </label>
           ))}
         </div>

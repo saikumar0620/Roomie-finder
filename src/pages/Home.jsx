@@ -11,13 +11,16 @@ export default function Home() {
   return (
     <div className="wrap" style={{ paddingTop: 40, paddingBottom: 60 }}>
       {/* Hero */}
-      <div className="fade-up" style={{ textAlign: "center", marginBottom: 40 }}>
-        <span className="badge" style={{ marginBottom: 12 }}>🏠 Find your perfect room</span>
-        <h1 style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", fontWeight: 700, letterSpacing: "-0.04em", margin: "12px 0 8px" }}>
-          Your next home, <span className="grad-text">waiting for you</span>
+      <div className="fade-up" style={{ textAlign: "center", marginBottom: 64, marginTop: 20 }}>
+        <span className="badge" style={{ marginBottom: 16, padding: "6px 16px", fontSize: "0.8125rem", boxShadow: "0 4px 12px var(--p-glow)" }}>
+          Find your room, right in your hands
+        </span>
+        <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 4.5rem)", fontWeight: 800, letterSpacing: "-0.04em", margin: "16px 0 20px", lineHeight: 1.1 }}>
+          Your next home, <br/>
+          <span className="grad-text">waiting for you.</span>
         </h1>
-        <p style={{ color: "var(--tx2)", fontSize: "1rem", maxWidth: 480, margin: "0 auto" }}>
-          Browse verified roommate listings — filter by rent, location & preferences.
+        <p style={{ color: "var(--tx2)", fontSize: "1.125rem", maxWidth: 540, margin: "0 auto", lineHeight: 1.6 }}>
+          Discover verified roommates, browse premium listings, and seamlessly message owners — all in one beautifully designed space.
         </p>
       </div>
 

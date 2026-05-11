@@ -62,3 +62,11 @@ export const getUserConversations = async (userId) => {
   });
   return res.rows;
 };
+
+export const deleteConversation = async (conversationId) => {
+  return await databases.deleteRow({
+    databaseId: DATABASE_ID,
+    tableId: COL_CONVERSATIONS,
+    rowId: conversationId
+  });
+};

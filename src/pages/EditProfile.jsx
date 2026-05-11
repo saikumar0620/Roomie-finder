@@ -11,7 +11,7 @@ export default function EditProfile() {
 
   const [loading, setLoading] = useState(false);
   const [profileId, setProfileId] = useState(null);
-  const [form, setForm] = useState({ bio: "", habits: "" });
+  const [form, setForm] = useState({ name: "", bio: "", habits: "" });
   const [lookingForRoom, setLookingForRoom] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [avatarFile, setAvatarFile] = useState(null);
@@ -21,7 +21,7 @@ export default function EditProfile() {
       getProfile(user.$id).then(prof => {
         if (prof) {
           setProfileId(prof.$id);
-          setForm({ bio: prof.bio || "", habits: prof.habits || "" });
+          setForm({ name: prof.name || user.name || "", bio: prof.bio || "", habits: prof.habits || "" });
           if (prof.avatarId) {
             setAvatarUrl(getFilePreview(prof.avatarId).toString());
           }
@@ -49,7 +49,7 @@ export default function EditProfile() {
       }
 
       const data = {
-        name: user.name,
+        name: form.name || user.name || "Anonymous",
         bio: form.bio,
         habits: form.habits,
         lookingForRoom,
@@ -134,6 +134,16 @@ export default function EditProfile() {
                   }} />
                 </span>
               </label>
+            </div>
+
+            <div>
+              <label className="lbl">Display Name</label>
+              <input 
+                className="inp" 
+                placeholder="What should we call you?" 
+                value={form.name} 
+                onChange={set("name")} 
+              />
             </div>
 
             <div>

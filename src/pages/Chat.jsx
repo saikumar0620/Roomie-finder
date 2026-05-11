@@ -77,7 +77,7 @@ export default function Chat() {
           </div>
           <div>
             <h2 style={{ margin: 0, fontSize: "1rem" }}>
-              {profile?.bio ? "User" : "Conversation"}
+              {profile?.name ? profile.name : "Roommate"}
             </h2>
             <p style={{ margin: 0, fontSize: "0.75rem", color: "var(--p)", display: "flex", alignItems: "center", gap: 4 }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--p)", animation: "pulse 2s infinite" }} />

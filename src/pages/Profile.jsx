@@ -18,6 +18,7 @@ export default function Profile() {
   const { removeFavorite, favorites } = useFavorites();
   const [activeTab, setActiveTab] = useState("listings");
   const [loadingId, setLoadingId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
 
   const { data: profile } = useQuery({
     queryKey: ["profile", user?.$id],
@@ -25,11 +26,15 @@ export default function Profile() {
     enabled: !!user,
   });
 
-  const handleDelete = async (id) => {
-    if (!confirm("Delete this listing?")) return;
-    setLoadingId(id);
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteId) return;
+    setLoadingId(deleteId);
     try {
-      await deleteListing(id);
+      await deleteListing(deleteId);
       toast.success("Listing deleted");
       refetch();
       queryClient.invalidateQueries({ queryKey: ["listings"] });
@@ -37,6 +42,7 @@ export default function Profile() {
       toast.error("Failed to delete");
     } finally {
       setLoadingId(null);
+      setDeleteId(null);
     }
   };
 
@@ -163,7 +169,7 @@ export default function Profile() {
                       Edit
                     </Link>
                     <button
-                      onClick={() => handleDelete(l.$id)}
+                      onClick={() => handleDeleteClick(l.$id)}
                       disabled={loadingId === l.$id}
                       className="btn"
                       style={{
@@ -234,6 +240,29 @@ export default function Profile() {
             </div>
           )}
         </>
+      )}
+
+      {deleteId && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+          background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          zIndex: 100, padding: 24, animation: "fadeUp 0.2s ease"
+        }}>
+          <div className="auth-card fade-up" style={{ textAlign: "center", padding: "32px 24px" }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>🗑️</div>
+            <h2 style={{ fontSize: "1.25rem", margin: "0 0 8px" }}>Delete Listing?</h2>
+            <p style={{ color: "var(--tx2)", fontSize: "0.875rem", marginBottom: 24 }}>
+              This action cannot be undone. Are you sure you want to permanently remove this room listing?
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+              <button className="btn btn-o" onClick={() => setDeleteId(null)}>Cancel</button>
+              <button className="btn btn-p" style={{ background: "var(--p)" }} onClick={confirmDelete}>
+                {loadingId === deleteId ? "Deleting..." : "Yes, Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

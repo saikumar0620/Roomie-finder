@@ -4,6 +4,19 @@ import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import LocationAutocomplete from "../components/LocationAutocomplete";
+
+const AMENITIES_LIST = [
+  { id: "WiFi", icon: "📶" },
+  { id: "AC", icon: "❄️" },
+  { id: "Gym", icon: "🏋️" },
+  { id: "Parking", icon: "🚗" },
+  { id: "Attached Washroom", icon: "🚿" },
+  { id: "Washing Machine", icon: "🧺" },
+  { id: "Power Backup", icon: "⚡" },
+  { id: "Geyser", icon: "♨️" },
+  { id: "Balcony", icon: "🪴" },
+];
 
 const Field = ({ label, children }) => (
   <div>
@@ -147,13 +160,20 @@ export default function CreateListing() {
                   <option value="">Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
+                  <option value="couple">Couple</option>
+                  <option value="student">Student</option>
+                  <option value="professional">Professional</option>
                   <option value="any">Any</option>
                 </select>
               </Field>
             </div>
 
             <Field label="Location *">
-              <input className="inp" placeholder="e.g. Koramangala, Bangalore" value={form.location} onChange={set("location")} />
+              <LocationAutocomplete 
+                value={form.location} 
+                onChange={(val) => setForm(f => ({ ...f, location: val }))} 
+                placeholder="e.g. Koramangala, Bangalore" 
+              />
             </Field>
 
             <Field label="Description">
@@ -162,21 +182,21 @@ export default function CreateListing() {
 
             <Field label="Amenities">
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-                {["WiFi", "AC", "Gym", "Parking", "Attached Washroom"].map(amenity => (
-                  <label key={amenity} style={{
+                {AMENITIES_LIST.map(({ id, icon }) => (
+                  <label key={id} style={{
                     display: "flex", alignItems: "center", gap: 6, fontSize: "0.875rem", cursor: "pointer",
-                    background: amenities.includes(amenity) ? "var(--p-light, rgba(79, 70, 229, 0.1))" : "var(--sur2)",
-                    color: amenities.includes(amenity) ? "var(--p)" : "var(--tx2)",
-                    border: `1px solid ${amenities.includes(amenity) ? "var(--p)" : "var(--bdr)"}`,
+                    background: amenities.includes(id) ? "var(--p-light, rgba(225, 29, 72, 0.08))" : "var(--sur2)",
+                    color: amenities.includes(id) ? "var(--p)" : "var(--tx2)",
+                    border: `1px solid ${amenities.includes(id) ? "var(--p)" : "var(--bdr)"}`,
                     padding: "6px 12px", borderRadius: 20, transition: "all 0.2s"
                   }}>
                     <input 
                       type="checkbox" 
                       style={{ display: "none" }}
-                      checked={amenities.includes(amenity)}
-                      onChange={() => toggleAmenity(amenity)} 
+                      checked={amenities.includes(id)}
+                      onChange={() => toggleAmenity(id)} 
                     />
-                    {amenity}
+                    <span style={{ fontSize: "1rem" }}>{icon}</span> {id}
                   </label>
                 ))}
               </div>
