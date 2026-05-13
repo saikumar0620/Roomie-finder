@@ -6,7 +6,8 @@ import Roommates from "../pages/Roommates";
 import CreateListing from "../pages/CreateListing";
 import Profile from "../pages/Profile";
 import EditProfile from "../pages/EditProfile";
-import ProtectedRoute from "../routes/protectedRoute";
+import ProtectedRoute from "../routes/ProtectedRoute";
+
 import ListingDetails from "../pages/ListingDetails";
 import Inbox from "../pages/Inbox";
 import Chat from "../pages/Chat";
