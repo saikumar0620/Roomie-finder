@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useThemeStore } from "../store/useThemeStore";
-
 export default function Navbar() {
   const { user, logoutUser } = useAuthStore();
   const { darkMode, toggleTheme } = useThemeStore();

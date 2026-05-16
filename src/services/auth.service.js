@@ -5,12 +5,16 @@ export const signup = async (email, password, name) => {
 };
 
 export const login = async (email, password) => {
-  await account.deleteSession({ sessionId: "current" });
   return await account.createEmailPasswordSession({ email, password });
 };
 
 export const logout = async () => {
-  return await account.deleteSession({ sessionId: "current" });
+  try {
+    return await account.deleteSession({ sessionId: "current" });
+  } catch (error) {
+    console.warn("Logout failed, possibly no active session:", error);
+    return null; // Return null or false to indicate failed logout without re-throwing
+  }
 };
 
 export const getCurrentUser = async () => {
